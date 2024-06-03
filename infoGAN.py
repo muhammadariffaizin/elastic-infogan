@@ -155,6 +155,8 @@ class infoGAN(object):
         print ("Length of dataloader", len(self.data_loader))
         data = self.data_loader.__iter__().__next__()[0]
 
+        torch.autograd.set_detect_anomaly(True)
+
         # networks init
         self.G = Generator(input_dim = self.z_dim, output_dim = data.shape[1], input_size = self.input_size, len_discrete_code = self.len_discrete_code)
         self.FE = Front_end(input_dim = data.shape[1], input_size = self.input_size)
@@ -198,25 +200,19 @@ class infoGAN(object):
             self.sample_z_, self.sample_y_ = \
                 self.sample_z_.cuda(), self.sample_y_.cuda()
                 
-
     def sample_gumbel(self, shape, eps = 1e-20):
-
-	    u = torch.FloatTensor(shape, self.len_discrete_code).cuda().uniform_(0, 1)
-	    return -torch.log(-torch.log(u + eps) + eps)
+        u = torch.FloatTensor(shape, self.len_discrete_code).cuda().uniform_(0, 1)
+        return -torch.log(-torch.log(u + eps) + eps)
 
     def gumbel_softmax_sample(self, logits, temp, batch_size):
-
-	    y = logits + self.sample_gumbel(batch_size)
-	    return torch.nn.functional.softmax( y / temp)
+        y = logits + self.sample_gumbel(batch_size)
+        return torch.nn.functional.softmax(y / temp)
 
     def approx_latent(self, params):
-
-	    params = F.softmax(params)
-	    log_params = torch.log(params)
-	    c = self.gumbel_softmax_sample(log_params, temp = 0.1, batch_size = self.batch_size) 
-	    return c
-
-
+        params = F.softmax(params)
+        log_params = torch.log(params)
+        c = self.gumbel_softmax_sample(log_params, temp = 0.1, batch_size = self.batch_size) 
+        return c
 
     def train(self):
         self.train_hist = {}
