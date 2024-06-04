@@ -206,10 +206,10 @@ class infoGAN(object):
 
     def gumbel_softmax_sample(self, logits, temp, batch_size):
         y = logits + self.sample_gumbel(batch_size)
-        return torch.nn.functional.softmax(y / temp, dim=1)
+        return torch.nn.functional.softmax(y / temp, dim=0)
 
     def approx_latent(self, params):
-        params = F.softmax(params, dim=1)
+        params = F.softmax(params, dim=0)
         log_params = torch.log(params)
         c = self.gumbel_softmax_sample(log_params, temp = 0.1, batch_size = self.batch_size) 
         return c
