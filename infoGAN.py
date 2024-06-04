@@ -122,7 +122,7 @@ class Latent_predictor(nn.Module):
 
         a = self.fc(input)
         b = self.fc1(a)
-        return a,b
+        return a.clone(), b.clone()
 
 
 class infoGAN(object):
@@ -274,8 +274,8 @@ class infoGAN(object):
                 # Augmentation similarity loss 
                 real_c_pred,_ = self.Q(real_intm)
                 real_aux_c_pred,_ = self.Q(real_intm_aux)
-                real_c_pred = F.normalize(real_c_pred,dim=1)
-                real_aux_c_pred = F.normalize(real_aux_c_pred,dim=1)
+                real_c_pred = F.normalize(real_c_pred, dim=1)
+                real_aux_c_pred = F.normalize(real_aux_c_pred, dim=1)
                 kl_loss = self.nt_xent_criterion(real_c_pred, real_aux_c_pred)
 
                  
