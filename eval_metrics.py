@@ -68,7 +68,7 @@ repeat_checks = 100
 temp_y = torch.zeros((sample_num, 1))
 for i in range(sample_num):
     temp_y[i] = temp_y[i] + (i / (sample_num/len_discrete_code)) 
-sample_y_ = torch.zeros((sample_num, len_discrete_code)).scatter_(1, temp_y.type(torch.LongTensor), 1).cuda()
+sample_y_ = torch.zeros((sample_num, len_discrete_code)).scatter(1, temp_y.type(torch.LongTensor), 1).cuda()
 
 
 # defining and loading the weights of the generator

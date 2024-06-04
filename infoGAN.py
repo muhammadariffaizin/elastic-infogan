@@ -194,11 +194,10 @@ class infoGAN(object):
         for i in range(self.sample_num):
                 temp_y[i] = temp_y[i] + (i / (self.sample_num/self.len_discrete_code)) 
         
-        self.sample_y_ = torch.zeros((self.sample_num, self.len_discrete_code)).scatter_(1, temp_y.type(torch.LongTensor), 1)
+        self.sample_y_ = torch.zeros((self.sample_num, self.len_discrete_code)).scatter(1, temp_y.type(torch.LongTensor), 1)
 
         if self.gpu_mode:
-            self.sample_z_, self.sample_y_ = \
-                self.sample_z_.cuda(), self.sample_y_.cuda()
+            self.sample_z_, self.sample_y_ = self.sample_z_.cuda(), self.sample_y_.cuda()
                 
     def sample_gumbel(self, shape, eps = 1e-20):
         u = torch.FloatTensor(shape, self.len_discrete_code).cuda().uniform_(0, 1)

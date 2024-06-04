@@ -70,7 +70,7 @@ class NTXentLoss(torch.nn.Module):
         negatives = similarity_matrix[self.mask_samples_from_same_repr].view(2 * self.batch_size, -1)
 
         logits = torch.cat((positives, negatives), dim=1)
-        logits /= self.temperature
+        logits = logits / self.temperature
 
         labels = torch.zeros(2 * self.batch_size).to(self.device).long()
         #print(labels.shape)

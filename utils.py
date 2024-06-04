@@ -69,7 +69,7 @@ def load_celebA(dir, transform, batch_size, shuffle):
 def print_network(net):
     num_params = 0
     for param in net.parameters():
-        num_params += param.numel()
+        num_params = num_params + param.numel()
     print(net)
     print('Total number of parameters: %d' % num_params)
 
@@ -132,11 +132,11 @@ def loss_plot(hist, path = 'Train_hist.png', model_name = ''):
 def initialize_weights(net):
     for m in net.modules():
         if isinstance(m, nn.Conv2d):
-            m.weight.data.normal_(0, 0.02)
-            m.bias.data.zero_()
+            m.weight.data = torch.randn_like(m.weight.data) * 0.02
+            m.bias.data = torch.zeros_like(m.bias.data)
         elif isinstance(m, nn.ConvTranspose2d):
-            m.weight.data.normal_(0, 0.02)
-            m.bias.data.zero_()
+            m.weight.data = torch.randn_like(m.weight.data) * 0.02
+            m.bias.data = torch.zeros_like(m.bias.data)
         elif isinstance(m, nn.Linear):
-            m.weight.data.normal_(0, 0.02)
-            m.bias.data.zero_()
+            m.weight.data = torch.randn_like(m.weight.data) * 0.02
+            m.bias.data = torch.zeros_like(m.bias.data)
